@@ -1,0 +1,66 @@
+# ---------------------------------- */
+# Archivo: /docker-compose.yml       */
+# ---------------------------------- */
+version: '3.8'
+
+services:
+  # 1️⃣ Contenedor Frontend (React)
+  frontend-rodrigo:
+    build:
+      context: ./frontend  # Busca el Dockerfile en la carpeta 'frontend'
+      dockerfile: Dockerfile
+    container_name: frontend-rodrigo # Contenedor con tu nombre
+    ports:
+      - "3000:3000"         # Expone el puerto 3000 de tu PC al 3000 del contenedor
+    depends_on:
+      - api-vazquez         # No arranca hasta que la API esté lista
+    networks:
+      - todo-net
+
+  # 2️⃣ Contenedor Backend (FastAPI)
+  api-vazquez:
+    build:
+      context: ./backend   # Busca el Dockerfile en la carpeta 'backend'
+      dockerfile: Dockerfile
+    container_name: api-vazquez    # Contenedor con tu apellido
+    environment:
+      # Variables de entorno para que FastAPI se conecte a la BD
+      DB_HOST: db-reyes       # ¡¡IMPORTANTE!! Se conecta por el nombre del servicio
+      DB_USER: admin_rodrigo
+      DB_PASSWORD: password_seguro_123 # ¡Cambia esto por una contraseña segura!
+      DB_NAME: rodrigo_db     # BD con tu nombre (requisito)
+    depends_on:
+      - db-reyes            # No arranca hasta que la BD esté lista
+    ports:
+      - "8000:8000"         # Expone el puerto 8000 de tu PC al 8000 del contenedor
+    networks:
+      - todo-net
+
+  # 3️⃣ Contenedor Base de Datos (MySQL)
+  db-reyes:
+    image: mysql:8.0
+    container_name: db-reyes       # Contenedor con tu apellido
+    environment:
+      MYSQL_DATABASE: rodrigo_db # Crea esta BD al iniciar (requisito)
+      MYSQL_USER: admin_rodrigo
+      MYSQL_PASSWORD: password_seguro_123 # ¡Debe coincidir con la de la API!
+      MYSQL_ROOT_PASSWORD: root_password_seguro_456
+    volumes:
+      # Volumen NOMBRADO para persistencia (requisito)
+      - db-data:/var/lib/mysql
+      # Script de inicialización para crear tablas (asume que lo tienes)
+      - ./mysql-init:/docker-entrypoint-initdb.d
+    ports:
+      - "3306:3306"         # Expone el puerto de MySQL (para depurar)
+    networks:
+      - todo-net
+
+# Definición de la Red (requisito)
+networks:
+  todo-net:
+    driver: bridge
+
+# Definición del Volumen (requisito)
+volumes:
+  db-data:
+    driver: local

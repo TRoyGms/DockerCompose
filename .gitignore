@@ -1,0 +1,14 @@
+# Python
+__pycache__/
+venv/
+*.pyc
+
+# Node
+node_modules/
+.npm
+
+# Archivos sensibles
+.env
+
+# OS
+.DS_Store
