@@ -7,7 +7,7 @@ services:
   # 1️⃣ Contenedor Frontend (React)
   frontend-rodrigo:
     build:
-      context: ./frontend  # Busca el Dockerfile en la carpeta 'frontend'
+      context: ./FRONT  # Busca el Dockerfile en la carpeta 'frontend'
       dockerfile: Dockerfile
     container_name: frontend-rodrigo # Contenedor con tu nombre
     ports:
@@ -20,7 +20,7 @@ services:
   # 2️⃣ Contenedor Backend (FastAPI)
   api-vazquez:
     build:
-      context: ./backend   # Busca el Dockerfile en la carpeta 'backend'
+      context: ./API  # Busca el Dockerfile en la carpeta 'backend'
       dockerfile: Dockerfile
     container_name: api-vazquez    # Contenedor con tu apellido
     environment:
