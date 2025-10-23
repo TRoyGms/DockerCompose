@@ -37,7 +37,7 @@ origins = [
     "http://localhost:5173",
     "http://localhost",      # Para el deploy en EC2 (puerto 80)
     "http://52.91.116.113",
-    # Si usas la IP de EC2, también deberías agregarla
+    "http://52.91.116.113:3000", # Si usas la IP de EC2, también deberías agregarla
 ]
 
 app.add_middleware(
